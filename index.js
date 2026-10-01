@@ -3,16 +3,29 @@ const MAIUSCULAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const NUMEROS = "0123456789";
 const SIMBOLOS = "!@#$%&*-_+=?";
 
-const TAMANHO = 12;
-const USAR_MAIUSCULAS = true;
-const USAR_NUMEROS = true;
-const USAR_SIMBOLOS = true;
+const argumentos = process.argv.slice(2);
 
-function montarAlfabeto() {
+function temFlag(nome) {
+  return argumentos.includes(nome);
+}
+
+function lerOpcoes() {
+  const indiceTamanho = argumentos.indexOf("--tamanho");
+  const tamanho = indiceTamanho === -1 ? 12 : Number(argumentos[indiceTamanho + 1]);
+
+  return {
+    tamanho,
+    usarMaiusculas: !temFlag("--sem-maiusculas"),
+    usarNumeros: !temFlag("--sem-numeros"),
+    usarSimbolos: !temFlag("--sem-simbolos"),
+  };
+}
+
+function montarAlfabeto(opcoes) {
   let alfabeto = MINUSCULAS;
-  if (USAR_MAIUSCULAS) alfabeto += MAIUSCULAS;
-  if (USAR_NUMEROS) alfabeto += NUMEROS;
-  if (USAR_SIMBOLOS) alfabeto += SIMBOLOS;
+  if (opcoes.usarMaiusculas) alfabeto += MAIUSCULAS;
+  if (opcoes.usarNumeros) alfabeto += NUMEROS;
+  if (opcoes.usarSimbolos) alfabeto += SIMBOLOS;
   return alfabeto;
 }
 
@@ -39,6 +52,7 @@ function calcularForca(senha) {
   return "forte";
 }
 
-const senha = sortearSenha(TAMANHO, montarAlfabeto());
+const opcoes = lerOpcoes();
+const senha = sortearSenha(opcoes.tamanho, montarAlfabeto(opcoes));
 console.log(senha);
 console.log("forca:", calcularForca(senha));
