@@ -11,7 +11,13 @@ function temFlag(nome) {
 
 function lerOpcoes() {
   const indiceTamanho = argumentos.indexOf("--tamanho");
-  const tamanho = indiceTamanho === -1 ? 12 : Number(argumentos[indiceTamanho + 1]);
+  let tamanho = indiceTamanho === -1 ? 12 : Number(argumentos[indiceTamanho + 1]);
+
+  // --tamanho sem numero valido voltava senha vazia e sem aviso nenhum
+  if (!Number.isInteger(tamanho) || tamanho <= 0) {
+    console.log("tamanho invalido, usando 12");
+    tamanho = 12;
+  }
 
   return {
     tamanho,
