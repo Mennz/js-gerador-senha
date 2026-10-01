@@ -25,4 +25,20 @@ function sortearSenha(tamanho, alfabeto) {
   return senha;
 }
 
-console.log(sortearSenha(TAMANHO, montarAlfabeto()));
+function calcularForca(senha) {
+  let variedade = 0;
+  if (/[a-z]/.test(senha)) variedade++;
+  if (/[A-Z]/.test(senha)) variedade++;
+  if (/[0-9]/.test(senha)) variedade++;
+  if (/[^a-zA-Z0-9]/.test(senha)) variedade++;
+
+  const pontos = variedade + (senha.length >= 12 ? 2 : senha.length >= 8 ? 1 : 0);
+
+  if (pontos <= 2) return "fraca";
+  if (pontos <= 4) return "media";
+  return "forte";
+}
+
+const senha = sortearSenha(TAMANHO, montarAlfabeto());
+console.log(senha);
+console.log("forca:", calcularForca(senha));
