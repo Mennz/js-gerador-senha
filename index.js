@@ -1,3 +1,5 @@
+const { execSync } = require("child_process");
+
 const MINUSCULAS = "abcdefghijklmnopqrstuvwxyz";
 const MAIUSCULAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const NUMEROS = "0123456789";
@@ -35,7 +37,18 @@ function lerOpcoes() {
     usarNumeros: !temFlag("--sem-numeros"),
     usarSimbolos: !temFlag("--sem-simbolos"),
     semAmbiguos: temFlag("--sem-ambiguos"),
+    copiar: temFlag("--copiar"),
   };
+}
+
+// clip e o comando do windows pra mandar texto pra area de transferencia
+function copiarParaAreaDeTransferencia(texto) {
+  try {
+    execSync("clip", { input: texto });
+    return true;
+  } catch (erro) {
+    return false;
+  }
 }
 
 function montarAlfabeto(opcoes) {
@@ -85,7 +98,19 @@ const opcoes = lerOpcoes();
 const alfabeto = montarAlfabeto(opcoes);
 const entropia = calcularEntropia(opcoes.tamanho, alfabeto);
 
+let ultimaSenha = "";
 for (let i = 0; i < opcoes.quantidade; i++) {
   const senha = sortearSenha(opcoes.tamanho, alfabeto);
   console.log(senha, "-", "forca:", calcularForca(senha), "-", entropia.toFixed(1), "bits");
+  ultimaSenha = senha;
+}
+
+if (opcoes.copiar) {
+  if (opcoes.quantidade > 1) {
+    console.log("--copiar so funciona com 1 senha, ignorando");
+  } else if (copiarParaAreaDeTransferencia(ultimaSenha)) {
+    console.log("copiada para a area de transferencia");
+  } else {
+    console.log("nao deu pra copiar (so funciona no windows)");
+  }
 }
