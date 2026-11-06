@@ -19,8 +19,17 @@ function lerOpcoes() {
     tamanho = 12;
   }
 
+  const indiceQuantidade = argumentos.indexOf("--quantidade");
+  let quantidade = indiceQuantidade === -1 ? 1 : Number(argumentos[indiceQuantidade + 1]);
+
+  if (!Number.isInteger(quantidade) || quantidade <= 0) {
+    console.log("quantidade invalida, usando 1");
+    quantidade = 1;
+  }
+
   return {
     tamanho,
+    quantidade,
     usarMaiusculas: !temFlag("--sem-maiusculas"),
     usarNumeros: !temFlag("--sem-numeros"),
     usarSimbolos: !temFlag("--sem-simbolos"),
@@ -59,6 +68,9 @@ function calcularForca(senha) {
 }
 
 const opcoes = lerOpcoes();
-const senha = sortearSenha(opcoes.tamanho, montarAlfabeto(opcoes));
-console.log(senha);
-console.log("forca:", calcularForca(senha));
+const alfabeto = montarAlfabeto(opcoes);
+
+for (let i = 0; i < opcoes.quantidade; i++) {
+  const senha = sortearSenha(opcoes.tamanho, alfabeto);
+  console.log(senha, "-", "forca:", calcularForca(senha));
+}
