@@ -13,6 +13,13 @@ e o programa mostra um medidor simples de forca da senha gerada.
   tamanho
 - Um bug real: `--tamanho` com valor invalido (ou zero) fazia o loop do
   sorteio nao rodar nenhuma vez e devolver senha vazia, sem nenhum aviso
+- Gerar varias senhas numa chamada so, com `--quantidade`
+- Tirar do alfabeto os caracteres que se confundem visualmente (`i`, `l`,
+  `1`, `o`, `0`...)
+- Calcular entropia (`tamanho * log2(tamanho do alfabeto)`) pra ter uma
+  nocao numerica de forca, alem do rotulo fraca/media/forte
+- Copiar a senha pra area de transferencia chamando o `clip` do Windows via
+  `child_process`
 
 ## Como rodar
 
@@ -20,7 +27,11 @@ e o programa mostra um medidor simples de forca da senha gerada.
 node index.js
 node index.js --tamanho 20
 node index.js --tamanho 8 --sem-maiusculas --sem-simbolos
+node index.js --quantidade 5
+node index.js --sem-ambiguos --copiar
 ```
 
-Flags disponiveis: `--tamanho <numero>`, `--sem-maiusculas`, `--sem-numeros`,
-`--sem-simbolos`. Minusculas sempre entram na senha.
+Flags disponiveis: `--tamanho <numero>`, `--quantidade <numero>`,
+`--sem-maiusculas`, `--sem-numeros`, `--sem-simbolos`, `--sem-ambiguos`,
+`--copiar`. Minusculas sempre entram na senha. `--copiar` so funciona
+gerando 1 senha e so no Windows (usa o `clip`).
