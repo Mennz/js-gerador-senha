@@ -76,10 +76,16 @@ function calcularForca(senha) {
   return "forte";
 }
 
+// entropia = quantos bits de "sorte" a senha tem, log2(alfabeto^tamanho)
+function calcularEntropia(tamanho, alfabeto) {
+  return tamanho * Math.log2(alfabeto.length);
+}
+
 const opcoes = lerOpcoes();
 const alfabeto = montarAlfabeto(opcoes);
+const entropia = calcularEntropia(opcoes.tamanho, alfabeto);
 
 for (let i = 0; i < opcoes.quantidade; i++) {
   const senha = sortearSenha(opcoes.tamanho, alfabeto);
-  console.log(senha, "-", "forca:", calcularForca(senha));
+  console.log(senha, "-", "forca:", calcularForca(senha), "-", entropia.toFixed(1), "bits");
 }
