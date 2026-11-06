@@ -2,6 +2,7 @@ const MINUSCULAS = "abcdefghijklmnopqrstuvwxyz";
 const MAIUSCULAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const NUMEROS = "0123456789";
 const SIMBOLOS = "!@#$%&*-_+=?";
+const AMBIGUOS = "il1Lo0O";
 
 const argumentos = process.argv.slice(2);
 
@@ -33,6 +34,7 @@ function lerOpcoes() {
     usarMaiusculas: !temFlag("--sem-maiusculas"),
     usarNumeros: !temFlag("--sem-numeros"),
     usarSimbolos: !temFlag("--sem-simbolos"),
+    semAmbiguos: temFlag("--sem-ambiguos"),
   };
 }
 
@@ -41,6 +43,13 @@ function montarAlfabeto(opcoes) {
   if (opcoes.usarMaiusculas) alfabeto += MAIUSCULAS;
   if (opcoes.usarNumeros) alfabeto += NUMEROS;
   if (opcoes.usarSimbolos) alfabeto += SIMBOLOS;
+
+  if (opcoes.semAmbiguos) {
+    for (const letra of AMBIGUOS) {
+      alfabeto = alfabeto.split(letra).join("");
+    }
+  }
+
   return alfabeto;
 }
 
